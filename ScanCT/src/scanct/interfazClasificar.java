@@ -133,11 +133,13 @@ public class interfazClasificar extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(interfazClasificar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        ScanCT obj= new ScanCT();
+        obj.clasificar();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new interfazClasificar().setVisible(true);
+                
             }
         });
     }

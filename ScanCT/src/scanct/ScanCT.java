@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package scanct;
-<<<<<<< HEAD
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,15 +12,19 @@ import java.util.List;
 
 
 
-=======
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
->>>>>>> e984f57eeeba7e49564299c93379a22b2fb1530d
+
 /**
  *
  * @author enriquedg
@@ -31,83 +34,12 @@ public class ScanCT {
     /**
      * @param args the command line arguments
      */
-<<<<<<< HEAD
-    //clasificar(){
-public ScanCT(){}
- 
-Configuracion config= new Configuracion();
 
-public void obtenerArchivosRemotos(String numero){
-    
-        ArrayList<ObDocumento> listaDocs = new ArrayList<>();
 
-        // Se construye la ruta        
-        
-        String ruta = config.carpetaRemota+"aceptados\\"+numero;
-        // Para pruebas
-        //String ruta = "C:\\abc\\"+Integer.toString(numero);
-        
-        File f = new File(ruta);
-        ArrayList<String> names = new ArrayList<String>(Arrays.asList(f.list()));
-                      
-        for (int i=0; i<names.size() ; i++){
 
-            // Se crea al edocumento para ser agregado individualmente a la lista
-            ObDocumento doc = new ObDocumento();
-            // Se agrega el nombre del elemento
-            doc.setNombre(names.get(i));
-            // Se agrega la ruta
-            doc.setRuta(ruta);
-            
-            // Se agrega el elemento a la lista
-            //moverArchivo
-       // añadir moverACarpetaAnalisis(numero,names.get(i));
-          
-        }
-        
-        f.delete();
-                           
-    }
-    
-    
-    public ArrayList<ObDocumento> obtenerArchivosExp(String numero){
-    
-        ArrayList<ObDocumento> listaDocs = new ArrayList<>();
-
-        // Se construye la ruta        
-        //String ruta = config.carpetaLocal+"analisis\\"+Integer.toString(numero);
-        String ruta = config.carpetaLocal+"aceptados\\"+numero;
-        // Para pruebas
-        //String ruta = "C:\\abc\\"+Integer.toString(numero);
-        
-        File f = new File(ruta);
-        ArrayList<String> names = new ArrayList<String>(Arrays.asList(f.list()));
-                      
-        for (int i=0; i<names.size() ; i++){
-
-            // Se crea al edocumento para ser agregado individualmente a la lista
-            ObDocumento doc = new ObDocumento();
-            // Se agrega el nombre del elemento
-            doc.setNombre(names.get(i));
-            // Se agrega la ruta
-            doc.setRuta(ruta);
-            
-            // Se agrega el elemento a la lista
-            listaDocs.add(doc);
-        }
-        
-        return listaDocs;    
-    }
-
-        
-       
-     
-    
- 
-
-}
-=======
     Configuracion conf = new Configuracion();
+    
+    
     public Connection connection;
     public ScanCT(){}
     public void conectarbd()
@@ -123,17 +55,85 @@ public void obtenerArchivosRemotos(String numero){
             sqlException.printStackTrace();
         }
     }
-   
-    public void clasificar(){
+    public String obtenerCT(String curp){
         this.conectarbd();
-        String ruta= conf.carpetaRemota;
-        File f = new File(ruta);
+        String consulta="Select ct from curp_rfc where curp =?";
+        System.out.println(consulta);
+        String ct="";
+            
+            
+           
+     try {
+          PreparedStatement preparado;
+         preparado = connection.prepareStatement(consulta);
+         preparado.setString(1,curp);
+            ResultSet resultado=preparado.executeQuery();
+              if(resultado.next()){
+                ct=resultado.getString("ct");
+                System.out.println("CT :D : "+ct);
+            }
+                        
+            preparado.close();
+            connection.close(); 
+            return ct.trim();
+     } catch (SQLException ex) {
+         Logger.getLogger(ScanCT.class.getName()).log(Level.SEVERE, null, ex);
+         return ct.trim();
+     }
+            
+            
+          
+    }
+     public void clasificar(){        
+        String ruta = conf.carpetaRemota+"aceptados\\";
+        File f = new File(ruta);    
+         FileUtils Files = new FileUtils();
+        String ct = "";
         System.out.println(f.list());
         ArrayList<String> names = new ArrayList<String>(Arrays.asList(f.list()));
-        for (String name : names) {
-            System.out.println(name);
+        for (int i=0; i<names.size();i++) {
+            System.out.println(names.get(i));
+            ct = obtenerCT(names.get(i));
+            if(ct.equals("")){
+                System.out.println("Saltar");
+            }
+            else
+            {
+               String prueba = (String)(names.get(i).toString());
+               String rutadestino = conf.carpetaCT + "\\" + names.get(i) + "\\";
+               System.out.println("CT:"+ct);
+               System.out.println(rutadestino); 
+               File destino = new File(conf.carpetaCT + ct + "\\" + names.get(i) + "\\"); 
+               File origen = new File(ruta+names.get(i)+"\\");
+                
+               
+        try {
+            System.out.println(origen);
+            System.out.println(destino);
+            
+            destino.mkdirs();
+            Files.moveDirectoryToDirectory(origen, destino,true);    
+        } catch(IOException E) {
+          System.out.println("No se pudo copiar el archivo");
+          E.printStackTrace();
+        
+        
+        }
+           
+        
+            }
+            
         }        
         
     }
- }
->>>>>>> e984f57eeeba7e49564299c93379a22b2fb1530d
+ 
+
+        
+       
+     
+    
+ 
+
+}
+
+   
