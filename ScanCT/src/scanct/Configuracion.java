@@ -7,6 +7,7 @@ package scanct;
 
 /**
  *
+<<<<<<< HEAD
  * @author enriquedg
  */
 public class Configuracion {
@@ -18,4 +19,10 @@ public class Configuracion {
     final String USUARIO="root";
     final String PASSWORD="cruzazul";
     final String DATABASE_URL="jdbc:mysql://127.0.0.1/curp_uset";
+=======
+ * @author Eli
+ */
+public class Configuracion {
+    
+>>>>>>> 088fd42aaec38c04649c26a5c20e96902a579ba7
 }

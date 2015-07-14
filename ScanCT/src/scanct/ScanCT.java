@@ -41,6 +41,7 @@ public class ScanCT {
         this.conectarbd();
         String ruta= conf.carpetaRemota;
         File f = new File(ruta);
+        System.out.println(f.list());
         ArrayList<String> names = new ArrayList<String>(Arrays.asList(f.list()));
         for (String name : names) {
             System.out.println(name);
