@@ -19,5 +19,5 @@ public class Configuracion {
     //Base de Datos local
     final String USUARIO="curp";
     final String PASSWORD="curpuset";
-    final String DATABASE_URL="jdbc:mysql://127.0.0.1/curp_uset";
+    final String DATABASE_URL="jdbc:mysql://localhost/curp_uset";
 }
