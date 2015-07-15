@@ -23,11 +23,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.apache.commons.io.FileUtils;
 
 /**
  *
- * @author enriquedg
+ * @author enriquedg :D
  */
 public class ScanCT {
  List<ObDocumento> listaDocs = new ArrayList<>();
@@ -91,41 +92,52 @@ public class ScanCT {
         String ct = "";
         System.out.println(f.list());
         ArrayList<String> names = new ArrayList<String>(Arrays.asList(f.list()));
-        for (int i=0; i<names.size();i++) {
-            System.out.println(names.get(i));
-            ct = obtenerCT(names.get(i));
-            if(ct.equals("")){
-                System.out.println("Saltar");
-            }
-            else
-            {
-               String prueba = (String)(names.get(i).toString());
-               String rutadestino = conf.carpetaCT + "\\" + names.get(i) + "\\";
-               System.out.println("CT:"+ct);
-               System.out.println(rutadestino); 
-               File destino = new File(conf.carpetaCT + ct + "\\" + names.get(i) + "\\"); 
-               File origen = new File(ruta+names.get(i)+"\\");
+        if(!names.isEmpty())
+        {
+            for (int i=0; i<names.size();i++) {
+
+                System.out.println(names.get(i));
+                ct = obtenerCT(names.get(i));
+                if(ct.equals("")){
+                    System.out.println("Se acabó");
+                    
+                }
                 
-               
-        try {
-            System.out.println(origen);
-            System.out.println(destino);
-            
-            destino.mkdirs();
-            Files.moveDirectoryToDirectory(origen, destino,true);    
-        } catch(IOException E) {
-          System.out.println("No se pudo copiar el archivo");
-          E.printStackTrace();
-        
-        
-        }
-           
-        
+                else
+                {
+                    String prueba = (String)(names.get(i).toString());
+                    String rutadestino = conf.carpetaCT + "\\" + names.get(i) + "\\";
+                    System.out.println("CT:"+ct);
+                    System.out.println(rutadestino);
+                    File destino = new File(conf.carpetaCT + ct + "\\" + names.get(i) + "\\");
+                    File origen = new File(ruta+names.get(i)+"\\");
+                    
+                    
+                    try {
+                        System.out.println(origen);
+                        System.out.println(destino);
+                        
+                        destino.mkdirs();
+                        Files.moveDirectoryToDirectory(origen, destino,true);
+                    } catch(IOException E) {
+                        System.out.println("No se pudo copiar el archivo");
+                        E.printStackTrace();
+                        
+                        
+                    }
+                    
+                    
+                }
+
             }
+            JOptionPane.showMessageDialog(null, "Se han movido exitosamente los elementos de directorio");
             
-        }        
-        
-    }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "No ningun elemento que mover");
+        }
+  }
  
 
         
