@@ -109,7 +109,7 @@ public class ScanCT {
                     String rutadestino = conf.carpetaCT + "\\" + names.get(i) + "\\";
                     System.out.println("CT:"+ct);
                     System.out.println(rutadestino);
-                    File destino = new File(conf.carpetaCT + ct + "\\" + names.get(i) + "\\");
+                    File destino = new File(conf.carpetaCT + ct + "\\" /*+ names.get(i) + "\\"*/);
                     File origen = new File(ruta+names.get(i)+"\\");
                     
                     
@@ -117,7 +117,7 @@ public class ScanCT {
                         System.out.println(origen);
                         System.out.println(destino);
                         
-                        destino.mkdirs();
+                        //destino.mkdirs();
                         Files.moveDirectoryToDirectory(origen, destino,true);
                     } catch(IOException E) {
                         System.out.println("No se pudo copiar el archivo");
