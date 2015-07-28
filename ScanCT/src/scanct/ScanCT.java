@@ -13,6 +13,7 @@ import java.util.List;
 
 
 import java.io.File;
+import java.io.IOError;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -85,19 +86,25 @@ public class ScanCT {
             
           
     }
-     public void clasificar(){        
+     public void clasificar(){  
+        //creamos la ruta en la cual se van a almacenar los documentos
         String ruta = conf.carpetaRemota+"aceptados\\";
-        File f = new File(ruta);    
-         FileUtils Files = new FileUtils();
+        File f = new File(ruta);   
+
+        FileUtils Files = new FileUtils();
+        FileUtils Files2 = new FileUtils();
         String ct = "";
         System.out.println(f.list());
         ArrayList<String> names = new ArrayList<String>(Arrays.asList(f.list()));
         if(!names.isEmpty())
         {
             for (int i=0; i<names.size();i++) {
-
+//____________Elifor ()
+                
+                
                 System.out.println(names.get(i));
                 ct = obtenerCT(names.get(i));
+                //ct = obtenerCT(names2.get())
                 if(ct.equals("")){
                     System.out.println("Se acabó");
                     
@@ -108,35 +115,69 @@ public class ScanCT {
                     String prueba = (String)(names.get(i).toString());
                     String rutadestino = conf.carpetaCT + "\\" + names.get(i) + "\\";
                     System.out.println("CT:"+ct);
-                    System.out.println(rutadestino);
-                    File destino = new File(conf.carpetaCT + ct + "\\" /*+ names.get(i) + "\\"*/);
+                    System.out.println("Carpeta destino: "+rutadestino);
+                    File destino = new File(conf.carpetaCT + ct + "\\");
+                    File destino2 = new File(conf.carpetaCT + ct + "\\" + names.get(i) + "\\");
+                    //String rutadest = conf.carpetaCT+"\\"+ct+"\\";
                     File origen = new File(ruta+names.get(i)+"\\");
+                    File f3;
                     
+                    File f2 = new File(origen+"\\");
+
+                     if (destino2.exists()){
+                                               
+                            ArrayList<String> names2 = new ArrayList<String>(Arrays.asList(f2.list()));
                     
-                    try {
-                        System.out.println(origen);
-                        System.out.println(destino);
-                        
-                        //destino.mkdirs();
-                        Files.moveDirectoryToDirectory(origen, destino,true);
-                    } catch(IOException E) {
-                        System.out.println("No se pudo copiar el archivo");
-                        E.printStackTrace();
-                        
+                            for(int j=0;j<names2.size();j++){
+                             
+                                f3 = new File(f2.toString()+"\\"+names2.get(j));
+                                System.out.println("El fichero que estoy intentando tomar: "+f3.toString());
+                                System.out.println("Destino es: "+destino2);
+                                try{
+                                   
+                                   
+                                Files2.moveFileToDirectory(f3, destino2, true);
+                                
+                                f2.delete();
+                                          
+                                            }
+                                catch(IOException e){
+                                    e.printStackTrace();
+                                }
+                               // f3 = new File(f2+"\\"+names2.get(i)+"\\");
+                            }
+                       // Files.moveFile(origen, destino);
+                           //try{
+                             //   Files.moveDirectoryToDirectory(origen, destino, true);
+                               // }
+                             //catch(IOException e){}
+                        }
+                        else{   
+                            try{
+                                Files.moveDirectoryToDirectory(origen, destino, true);
+                                }
+                             catch(IOException e){}
+                            }
+                           
+                    
+                        System.out.println("Se imprime el origen: "+origen);
+                        System.out.println("Se imprime el destino: "+destino);
                         
                     }
                     
                     
                 }
-
-            }
             JOptionPane.showMessageDialog(null, "Se han movido exitosamente los elementos de directorio");
-            
         }
+        
         else
         {
-            JOptionPane.showMessageDialog(null, "No ningun elemento que mover");
-        }
+                 JOptionPane.showMessageDialog(null, "No hay mas archivos que mover");
+        }  
+      
+     }    
+        
+       
   }
  
 
@@ -146,6 +187,5 @@ public class ScanCT {
     
  
 
-}
 
    
